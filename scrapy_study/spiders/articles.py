@@ -7,21 +7,23 @@ from scrapy.spiders import CrawlSpider,Rule
 class ArticleSpider(CrawlSpider):
     name='articles'
     
-    allowed_domains = ['baidu.com']
+    allowed_domains = ['weibo.com']
 
-    start_urls  = ['https://baike.baidu.com/', 'Benevolent_dictator_for_life']
+    start_urls  = ['https://weibo.com/']
 
     reles = [Rule(LinkExtractor(allow=r'.*'), callback='parse_items', follow=True)]
 
     def parse_items(self, response):
+        print('start ---------------------------')
+        print(response)
         url = response.url
-        title = response.css('h1::text').extract_first()
+        title = response.css('h1').extract_first()
         text = response.xpath('//div[@id="mw-content-text"]//text()').extract()
         lastUpdated = response.css('li#footer-info-lastmod::text').extract_first()
 
         lastUpdated = lastUpdated.replace('This page wae last edited on ', '')
-        print('URL is : {}'.format(url))
-        print('title is : {}'.format(title))
+        print('--------------------URL is : {}'.format(url))
+        print('--------------------title is : {}'.format(title))
         print('text is : {}'.format(text))
         print('Last updated : {}'.format(lastUpdated))
 
